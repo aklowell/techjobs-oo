@@ -1,7 +1,6 @@
 package org.launchcode.controllers;
 
-import org.launchcode.models.Job;
-import org.launchcode.models.JobFieldType;
+import org.launchcode.models.*;
 import org.launchcode.models.forms.JobForm;
 import org.launchcode.models.data.JobData;
 import org.springframework.stereotype.Controller;
@@ -23,15 +22,13 @@ public class JobController {
     private JobData jobData = JobData.getInstance();
 
     // The detail display for a given Job at URLs like /job?id=17
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public String index(@PathVariable int id, Model model) {
         Job job = jobData.findById(id);
 
         model.addAttribute(job);
 
-
         // TODO #1 - get the Job with the given ID and pass it into the view
-
 
         return "job-detail";
     }
@@ -43,17 +40,37 @@ public class JobController {
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public String add(Model model, @Valid Job newJob, Errors errors) {
-       if (errors.hasErrors()) {
-           return "new-job";
-       }
-        jobData.add(newJob);
+    public String add(Model model, @Valid JobForm jobForm, Errors errors, String name) {
+        if (errors.hasErrors()) {
+            return "new-job";
+        }
+
+        name = jobForm.getName();
+        Employer anEmployer = jobData.getEmployers().findById(jobForm.getEmployerId());
+        Location aLocation = jobData.getLocations().findById(jobForm.getLocationId());
+        PositionType aPositionType = jobData.getPositionTypes().findById(jobForm.getPositionTypeId());
+        CoreCompetency aSkill = jobData.getCoreCompetencies().findById(jobForm.getCoreCompetencyId());
+
+        Job newjob = new Job(name, anEmployer, aLocation, aPositionType, aSkill);
+      //use the getter to get the name
+
+        //get the ID of e.g. location...then add it that way..might have to do extra work in JobData
+        //look for the way that they used id to find the Employer -- in the instructions findby id
+
+        //   newJob = new JobData.
+
+
+        jobData.add(newjob);
+
         // TODO #6 - Validate the JobForm model, and if valid, create a
         // new Job and add it to the jobData data store. Then
         // redirect to the job detail view for the new Job.
         //if(jobForm's name field not null), add the job and redirect to the view
         //else display the not null error
+        model.addAttribute(newjob.getId());
+        model.addAttribute(newjob);
 
+            //or - find the id of the new, added job and call it up that way???
 
         return "job-detail";
 
