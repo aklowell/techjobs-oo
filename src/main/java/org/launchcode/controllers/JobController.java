@@ -9,8 +9,10 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.lang.reflect.Parameter;
 
 /**
  * Created by LaunchCode
@@ -23,10 +25,13 @@ public class JobController {
 
     // The detail display for a given Job at URLs like /job?id=17
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    //public String index(@RequestParam("id")int id, @PathVariable int id, Model model) {
     public String index(@PathVariable int id, Model model) {
-        Job job = jobData.findById(id);
 
+        Job job = jobData.findById(id);
+        //String pathstr = "?id=" + job.getId();
         model.addAttribute(job);
+        //model.addAttribute(id);
 
         // TODO #1 - get the Job with the given ID and pass it into the view
 
@@ -67,12 +72,19 @@ public class JobController {
         // redirect to the job detail view for the new Job.
         //if(jobForm's name field not null), add the job and redirect to the view
         //else display the not null error
+
         model.addAttribute(newjob.getId());
         model.addAttribute(newjob);
 
-            //or - find the id of the new, added job and call it up that way???
+        String str ="/" + (newjob.getId());     //"?id=" +
+        //or - find the id of the new, added job and call it up that way???
 
-        return "job-detail";
+
+
+        return "redirect:/job" + str;
+        //return "job-detail";
+
+        //+ "?id=" + newjob.getId();
 
     }
 }
