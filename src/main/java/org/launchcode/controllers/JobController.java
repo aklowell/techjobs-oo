@@ -24,12 +24,12 @@ public class JobController {
     private JobData jobData = JobData.getInstance();
 
     // The detail display for a given Job at URLs like /job?id=17
-    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     //public String index(@RequestParam("id")int id, @PathVariable int id, Model model) {
-    public String index(@PathVariable int id, Model model) {
+    public String index(@RequestParam int id, Model model) {
 
         Job job = jobData.findById(id);
-        //String pathstr = "?id=" + job.getId();
+
         model.addAttribute(job);
         //model.addAttribute(id);
 
@@ -73,15 +73,10 @@ public class JobController {
         //if(jobForm's name field not null), add the job and redirect to the view
         //else display the not null error
 
-        model.addAttribute(newjob.getId());
+        //model.addAttribute(newjob.getId());
         model.addAttribute(newjob);
 
-        String str ="/" + (newjob.getId());     //"?id=" +
-        //or - find the id of the new, added job and call it up that way???
-
-
-
-        return "redirect:/job" + str;
+        return "redirect:/job/?id=" +(newjob.getId());
         //return "job-detail";
 
         //+ "?id=" + newjob.getId();
