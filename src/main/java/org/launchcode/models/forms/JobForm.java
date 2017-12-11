@@ -28,7 +28,8 @@ public class JobForm {
     /*
         TODO #3 - Included other fields needed to create a job,
         with correct validation attributes and display names.
-        Don't forget to add getters and setters
+        Don't forget to add getters and setters.
+
      */
 
     private String employer;

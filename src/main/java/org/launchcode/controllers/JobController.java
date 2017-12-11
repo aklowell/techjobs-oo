@@ -24,14 +24,16 @@ public class JobController {
     private JobData jobData = JobData.getInstance();
 
     // The detail display for a given Job at URLs like /job?id=17
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    //public String index(@RequestParam("id")int id, @PathVariable int id, Model model) {
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(@RequestParam int id, Model model) {
+
+        //RequestParam has the reference to id and produces the ?id= syntax
 
         Job job = jobData.findById(id);
 
         model.addAttribute(job);
-        //model.addAttribute(id);
+
+        //the object job has all the fields needed, which can be displayed in the template using *{field}
 
         // TODO #1 - get the Job with the given ID and pass it into the view
 
@@ -57,13 +59,8 @@ public class JobController {
         CoreCompetency aSkill = jobData.getCoreCompetencies().findById(jobForm.getCoreCompetencyId());
 
         Job newjob = new Job(name, anEmployer, aLocation, aPositionType, aSkill);
-      //use the getter to get the name
 
-        //get the ID of e.g. location...then add it that way..might have to do extra work in JobData
-        //look for the way that they used id to find the Employer -- in the instructions findby id
-
-        //   newJob = new JobData.
-
+        //from the jobForm thing we can get all the info needed to create a new Job object, then add it to the database, finding each field by its id.
 
         jobData.add(newjob);
 
@@ -73,13 +70,11 @@ public class JobController {
         //if(jobForm's name field not null), add the job and redirect to the view
         //else display the not null error
 
-        //model.addAttribute(newjob.getId());
+
         model.addAttribute(newjob);
 
-        return "redirect:/job/?id=" +(newjob.getId());
-        //return "job-detail";
+        return "redirect:/job?id=" +(newjob.getId());
 
-        //+ "?id=" + newjob.getId();
 
     }
 }
